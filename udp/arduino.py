@@ -21,8 +21,12 @@ sleeptime = 0.2
 if __name__ == '__main__':
     base_path = "data/" #dirpath
     file = 'tdoa.xlsx'
-    df = pd.read_excel(io=base_path + file,index_col=None,header=None)
-    # df = pd.read_csv(base_path + file,index_col=None,header=None)
+    # xlsx
+    if file[-4:]=="xlsx":
+        df = pd.read_excel(io=base_path + file,index_col=None,header=None)
+    # csv
+    elif file[-3:]=="csv":
+        df = pd.read_csv(base_path + file,index_col=None,header=None)
     while(True):
         for i in range(df.shape[0]):
             str_to_send = "#".join([str(j) for j in (df.iloc[i]) ])
