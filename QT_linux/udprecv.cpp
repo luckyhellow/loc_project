@@ -2,16 +2,18 @@
 #include <signal.h>
 UDPrecv::UDPrecv()
 {
-//    signal(SIGCHLD, SIG_IGN);
-    if(fork()>0){
-//        signal(SIGCHLD, SIG_IGN);
+    pipe(fd);
+    pid_t pid = fork();
+    if(pid>0){
+        //parent
+        close(fd[1]);
         return;
     }
-    else{
+    else if(pid == 0){
+        close(fd[0]);
+
         struct sockaddr_in serveraddr, clientaddr;
-        char buf[128] = "11#11";
-        char buf1[128] = {0};
-        char buf2[128] = {0};
+
         /* socket文件描述符 */
         int sockfd;
 
@@ -43,43 +45,41 @@ UDPrecv::UDPrecv()
 
         while (1)
         {
-    //        if(fork()>0){
-    //            //父进程
-    //            break;
-    //        }
             recvfrom(sockfd, buf, 128, 0, (struct sockaddr*)&clientaddr, &len);
-            printf("client ip: %s, client port: %d\n", inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port));
-            for(int i=0;i<128&&buf[i]!='\0';++i){
-                if(buf[i]=='#'){
-                    strncpy(buf1,buf,i);
-                    buf[i] = '\0';
-                    strncpy(buf2,buf+i+1,127-i); //0 1 2 3
-                    break;
-                }
-            }
-//            *x = strtod(buf1,NULL);
-//            *y = strtod(buf2,NULL);
-            ofstream outfile("xy.txt",ios::out);
-            outfile<<strtod(buf1,NULL)<<"\n"<<strtod(buf2,NULL)<<endl;
-            outfile.close();
+//            printf("client ip: %s, client port: %d\n", inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port));
+            write(fd[1],buf,sizeof(buf));
         }
 
         close(sockfd);
     }
 }
 
-double UDPrecv::getx(){
-    ifstream fin("xy.txt",ios::in);
-    fin.getline(strx,128);
-    fin.close();
-    return strtod(strx,nullptr);
-}
-
-
-double UDPrecv::gety(){
-    ifstream fin("xy.txt",ios::in);
-    fin.getline(strx,128);
-    fin.getline(stry,128);
-    fin.close();
-    return strtod(stry,nullptr);
+void UDPrecv::recvxy(){
+    memset(buf,0,sizeof(buf));
+    int ret = read(fd[0],buf,sizeof(buf));
+    if(ret == 0){
+        cout<<"get nothing!\n";
+        return;
+    }
+    else if(ret == -1){
+        cout<<"something error!!!";
+        return;
+    }
+//    else if(ret > 0){
+//        write(STDOUT_FILENO,buf,ret);
+//        cout<<ret<<endl;
+//        cout<<buf[0]<<endl;
+//    }
+    for(int i=0;i<128&&buf[i]!='\0';++i){
+        if(buf[i]=='#'){
+            strncpy(buf1,buf,i);
+            buf[i] = '\0';
+            strncpy(buf2,buf+i+1,127-i); //0 1 2 3
+            break;
+        }
+    }
+    x = strtod(buf1,NULL);
+    y = strtod(buf2,NULL);
+//    cout<<x<<endl;
+//    cout<<y<<endl;
 }

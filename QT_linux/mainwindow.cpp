@@ -51,20 +51,17 @@ MainWindow::MainWindow(QWidget *parent)
     lineedit->resize(100,27);
     lineedit->move(100,670);
     lineedit->show();
-    //实例化calculate类
-//    Calculate* calculate = new Calculate();
     udp = new UDPrecv();
     connect(TU->timeupdate, &QTimer::timeout,[=](){
 //        qDebug()<<"1111";
-        location_x = udp->getx();
-        location_y = udp->gety();
+        location_xy = udp->getxy();
         //后续改为读取传进来的参数
         label = new QLabel(this);
         QMovie* movie = new QMovie(":/Image/point.gif");
         label->setMovie(movie);
         label->setAlignment(Qt::AlignCenter);
         label->resize(10,10);
-        label->move(140+location_x,location_y+40);
+        label->move(140+location_xy[0],location_xy[1]+40);
         movie->start();
         label->show();
         insert_intail(Listhead,label);
