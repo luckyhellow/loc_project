@@ -14,7 +14,9 @@
 #include <arpa/inet.h>
 #include <fstream>
 #include <vector>
-
+#include<unistd.h>
+#include<fcntl.h>
+#include<stdlib.h>
 
 #define PORT 8888
 #define BUF_SIZE 128
@@ -28,8 +30,10 @@ class UDPrecv
     char buf1[BUF_SIZE] = {0};
     char buf2[BUF_SIZE] = {0};
     char buf[BUF_SIZE] = {0};
+    char buflast[BUF_SIZE] = {0};
     double x = 0;
     double y = 0;
+
 
 public:
     UDPrecv();

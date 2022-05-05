@@ -40,6 +40,7 @@ MainWindow::MainWindow(QWidget *parent)
     // //////////
 
     this->TU = new Time_update(this);//计时器更新的频率
+    TU->begin_recv(1000);
 
     //输入框
     QLineEdit* lineedit = new QLineEdit();
@@ -52,9 +53,7 @@ MainWindow::MainWindow(QWidget *parent)
     lineedit->move(100,670);
     lineedit->show();
     udp = new UDPrecv();
-    connect(TU->timeupdate, &QTimer::timeout,[=](){
-//        qDebug()<<"1111";
-        location_xy = udp->getxy();
+    connect(TU->timeupdate1, &QTimer::timeout,[=](){//fluent to show
         //后续改为读取传进来的参数
         label = new QLabel(this);
         QMovie* movie = new QMovie(":/Image/point.gif");
@@ -65,6 +64,15 @@ MainWindow::MainWindow(QWidget *parent)
         movie->start();
         label->show();
         insert_intail(Listhead,label);
+    });
+    connect(TU->timeupdate2, &QTimer::timeout,[=](){//fluent to recv
+//        qDebug()<<"1111";
+        if(wait == 0){
+            wait = 1;
+//            cout<<"#############"<<endl;
+            location_xy = udp->getxy();
+            wait = 0;
+        }
     });
 
     MyPushButton *startButton = new MyPushButton(":/Image/startButton.jpg");

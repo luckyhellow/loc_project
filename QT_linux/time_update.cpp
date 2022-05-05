@@ -9,5 +9,8 @@ Time_update::Time_update(QObject *parent) : QObject(parent)
 //    timeupdate->start(500);
 //}
 void Time_update:: begin_update(int hz){
-    timeupdate->start(1000/hz);
+    timeupdate1->start(1000/hz);
+}
+void Time_update:: begin_recv(int hz){
+    timeupdate2->start(1000/hz);
 }

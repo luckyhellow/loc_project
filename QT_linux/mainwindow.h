@@ -36,5 +36,6 @@ private:
     labelList Listhead = NULL;
     int hz = 0;
     UDPrecv* udp;
+    int wait = 0;
 };
 #endif // MAINWINDOW_H

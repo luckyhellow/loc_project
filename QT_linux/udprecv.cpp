@@ -43,26 +43,24 @@ UDPrecv::UDPrecv()
         }
 
 
-        while (1)
-        {
+        while (true){
             recvfrom(sockfd, buf, 128, 0, (struct sockaddr*)&clientaddr, &len);
 //            printf("client ip: %s, client port: %d\n", inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port));
             write(fd[1],buf,sizeof(buf));
         }
-
         close(sockfd);
     }
 }
 
 void UDPrecv::recvxy(){
     memset(buf,0,sizeof(buf));
-    int ret = read(fd[0],buf,sizeof(buf));
-    if(ret == 0){
-        cout<<"get nothing!\n";
-        return;
-    }
-    else if(ret == -1){
-        cout<<"something error!!!";
+    int ret = fcntl(fd[0],F_GETFL);
+    ret |=O_NONBLOCK;
+    fcntl(fd[0],F_SETFL,ret);
+    ret = read(fd[0],buf,sizeof(buf));
+
+    if(ret <= 0){
+//        cout<<"get nothing!\n";
         return;
     }
 //    else if(ret > 0){
