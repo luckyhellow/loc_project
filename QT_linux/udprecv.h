@@ -13,25 +13,31 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <fstream>
+#include <vector>
 
 
 #define PORT 8888
-
+#define BUF_SIZE 128
 
 using namespace std;
 
 
 class UDPrecv
 {
-//    double * x = new double(0);
-//    double * y = new double(0);
-    char strx[128];
-    char stry[128];
+    int fd[2];
+    char buf1[BUF_SIZE] = {0};
+    char buf2[BUF_SIZE] = {0};
+    char buf[BUF_SIZE] = {0};
+    double x = 0;
+    double y = 0;
+
 public:
     UDPrecv();
-    double getx();
-    double gety();
-//    void udp(){UDP(x,y);}
+    void recvxy();
+    vector<double> getxy(){
+        recvxy();
+        return vector<double>{x,y};
+    }
 };
 
 #endif // UDPRECV_H

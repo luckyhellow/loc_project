@@ -35,7 +35,6 @@ RESOURCES += \
     res.qrc
 
 DISTFILES += \
-    loc.py \
     returnxy.py
 
 #LIBS += -lwsock32

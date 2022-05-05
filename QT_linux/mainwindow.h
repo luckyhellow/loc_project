@@ -8,10 +8,10 @@
 #include <QMovie>
 #include "time_update.h"
 #include "qlabel_list.h"
-//#include "calculate.h"
 #include <QIntValidator>
 #include <QLineEdit>
 #include <udprecv.h>
+#include <vector>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -29,8 +29,9 @@ public:
 private:
     Ui::MainWindow *ui;
     Time_update *TU;
-    double location_x = 0.0;
-    double location_y = 0.0;
+//    double location_x = 0.0;
+//    double location_y = 0.0;
+    vector<double> location_xy = {0,0};
     QLabel *label;
     labelList Listhead = NULL;
     int hz = 0;
