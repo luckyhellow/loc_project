@@ -40,12 +40,13 @@ MainWindow::MainWindow(QWidget *parent)
     // //////////
 
     this->TU = new Time_update(this);//计时器更新的频率
+    //fluence of updating xy's value
     TU->begin_recv(1000);
 
     //输入框
     QLineEdit* lineedit = new QLineEdit();
     QIntValidator *intValidator = new QIntValidator;
-    intValidator->setRange(1, 10000);
+    intValidator->setRange(1, 1000);
     lineedit->setValidator(intValidator);
 //    lineedit->setValidator( new QIntValidator(0, 10000, this) );
     lineedit->setParent(this);
