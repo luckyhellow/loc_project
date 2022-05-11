@@ -46,64 +46,64 @@ MainWindow::MainWindow(QWidget *parent)
     //输入框
     QLineEdit* lineedit = new QLineEdit();
     QIntValidator *intValidator = new QIntValidator;
+    //setting the legal range
     intValidator->setRange(1, 1000);
     lineedit->setValidator(intValidator);
-//    lineedit->setValidator( new QIntValidator(0, 10000, this) );
     lineedit->setParent(this);
     lineedit->resize(100,27);
     lineedit->move(100,670);
     lineedit->show();
+
+    //creat a new instance of "udprecv" to recv the data
     udp = new UDPrecv();
+
     QMovie* movie = new QMovie(":/Image/point.gif");
-    connect(TU->timeupdate1, &QTimer::timeout,[=](){//fluent to show
-        //后续改为读取传进来的参数
+    movie->start();
+    connect(TU->timeupdate, &QTimer::timeout,[=](){//fluent to show
+        //get the location of xy now
         location_xy = udp->getxy();
+        //creat a label and use it show the xy's location
+        //watch out Memory leak!
         label = new QLabel(this);
-        //deal with Memory leak
-//        QMovie* movie = new QMovie(":/Image/point.gif");
         label->setMovie(movie);
         label->setAlignment(Qt::AlignCenter);
         label->resize(10,10);
         label->move(140+location_xy[0],location_xy[1]+40);
-        movie->start();
         label->show();
+        //add to list inorder to realize the function of deleting labels
         insert_intail(Listhead,label);
     });
-//    connect(TU->timeupdate2, &QTimer::timeout,[=](){//fluent to recv
-////        qDebug()<<"1111";
-//        if(wait == 0){
-//            wait = 1;
-////            cout<<"#############"<<endl;
-//            location_xy = udp->getxy();
-//            wait = 0;
-//        }
-//    });
 
+    //create button to control start or not
+    //and connect it with HZ of showing label
     MyPushButton *startButton = new MyPushButton(":/Image/startButton.jpg");
     startButton->setParent(this);
     startButton->move(300,625);
     connect(startButton,&MyPushButton::clicked,[=](){
-//        qDebug() << "呵呵";
+        //a simple animation effect
         startButton->tik();
         startButton->tok();
         if(lineedit->text()==""){
             TU->begin_update();
-            qDebug() <<"str == null\n";
+//            qDebug() <<"str == null\n";
         }
         else {
             hz = lineedit->text().toInt();
-            qDebug() <<hz;
+//            qDebug() <<hz;
             TU->begin_update(hz);
         }
     });
 
+    //create button to clear the labels we have created
     MyPushButton *clearButton = new MyPushButton(":/Image/clearButton.jpg");
     clearButton->setParent(this);
     clearButton->move(625,625);
     connect(clearButton,&MyPushButton::clicked,[=](){
-//        qDebug() << "呵呵";
+        //a simple animation effect
         clearButton->tik();
         clearButton->tok();
+        //clear the show and delete labels we create with "new"
+        //watch out memory leak
         clear(Listhead);
     });
 
@@ -111,6 +111,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::paintEvent(QPaintEvent *)
 {
+    //paint the backgroud
     QPainter painter(this);
     QPixmap pix;
     pix.load(":/Image/floor.jpg");

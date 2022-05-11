@@ -5,11 +5,12 @@ UDPrecv::UDPrecv()
     pipe(fd);
     pid_t pid = fork();
     if(pid>0){
-        //parent
+        //parent process
         close(fd[1]);
         return;
     }
     else if(pid == 0){
+        //sub process
         close(fd[0]);
 
         struct sockaddr_in serveraddr, clientaddr;
@@ -53,37 +54,33 @@ UDPrecv::UDPrecv()
 }
 
 void UDPrecv::recvxy(){
+    //make sure the buflast and buf is empty(all of them are 0)
     memset(buflast,0,sizeof(buflast));
     memset(buf,0,sizeof(buf));
+    //setting pipe to none blocking
     int ret = fcntl(fd[0],F_GETFL);
     ret |=O_NONBLOCK;
     fcntl(fd[0],F_SETFL,ret);
-    bool re = true;
+    //recording whether there is something need to return
+    re = true;
     while((ret = read(fd[0],buflast,sizeof(buflast)))>0){
         memcpy(buf,buflast,sizeof (buf));
         re = false;
     }
-//    ret = read(fd[0],buf,sizeof(buf));
 
-    if(re){
-//        cout<<"get nothing!\n";
+    if(re){//nothing need to update
         return;
     }
-//    else if(ret > 0){
-//        write(STDOUT_FILENO,buf,ret);
-//        cout<<ret<<endl;
-//        cout<<buf[0]<<endl;
-//    }
+    //calculate xy by string
     for(int i=0;i<128&&buf[i]!='\0';++i){
         if(buf[i]=='#'){
             strncpy(buf1,buf,i);
             buf[i] = '\0';
-            strncpy(buf2,buf+i+1,127-i); //0 1 2 3
+            strncpy(buf2,buf+i+1,127-i);
             break;
         }
     }
+    //strtod: string to double
     x = strtod(buf1,NULL);
     y = strtod(buf2,NULL);
-//    cout<<x<<endl;
-//    cout<<y<<endl;
 }

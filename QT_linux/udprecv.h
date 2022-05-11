@@ -33,6 +33,7 @@ class UDPrecv
     char buflast[BUF_SIZE] = {0};
     double x = 0;
     double y = 0;
+    bool re = true;
 
 
 public:

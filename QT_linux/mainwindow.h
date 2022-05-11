@@ -29,8 +29,6 @@ public:
 private:
     Ui::MainWindow *ui;
     Time_update *TU;
-//    double location_x = 0.0;
-//    double location_y = 0.0;
     vector<double> location_xy = {0,0};
     QLabel *label;
     labelList Listhead = NULL;
