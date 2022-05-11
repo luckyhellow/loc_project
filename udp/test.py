@@ -8,7 +8,7 @@ client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 PORT = 8888
 
 
-sleeptime = 0.1
+sleeptime = 0.001
 date = ''
 dis = '100#300'
 recv = "start"#套接字编程控制 可以调节频率

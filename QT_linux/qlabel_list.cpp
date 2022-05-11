@@ -40,6 +40,8 @@ void clear(labelList& head)
         q = p;
         p = p->next;
         q->label->clear();
+        //deal with Memory leak
+        delete q->label;
         delete q;
     }
     head = NULL;

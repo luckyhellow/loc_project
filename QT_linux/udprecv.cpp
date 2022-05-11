@@ -53,13 +53,19 @@ UDPrecv::UDPrecv()
 }
 
 void UDPrecv::recvxy(){
+    memset(buflast,0,sizeof(buflast));
     memset(buf,0,sizeof(buf));
     int ret = fcntl(fd[0],F_GETFL);
     ret |=O_NONBLOCK;
     fcntl(fd[0],F_SETFL,ret);
-    ret = read(fd[0],buf,sizeof(buf));
+    bool re = true;
+    while((ret = read(fd[0],buflast,sizeof(buflast)))>0){
+        memcpy(buf,buflast,sizeof (buf));
+        re = false;
+    }
+//    ret = read(fd[0],buf,sizeof(buf));
 
-    if(ret <= 0){
+    if(re){
 //        cout<<"get nothing!\n";
         return;
     }

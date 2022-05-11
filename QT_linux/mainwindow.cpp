@@ -41,7 +41,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     this->TU = new Time_update(this);//计时器更新的频率
     //fluence of updating xy's value
-    TU->begin_recv(1000);
+//    TU->begin_recv(1000);
 
     //输入框
     QLineEdit* lineedit = new QLineEdit();
@@ -54,10 +54,13 @@ MainWindow::MainWindow(QWidget *parent)
     lineedit->move(100,670);
     lineedit->show();
     udp = new UDPrecv();
+    QMovie* movie = new QMovie(":/Image/point.gif");
     connect(TU->timeupdate1, &QTimer::timeout,[=](){//fluent to show
         //后续改为读取传进来的参数
+        location_xy = udp->getxy();
         label = new QLabel(this);
-        QMovie* movie = new QMovie(":/Image/point.gif");
+        //deal with Memory leak
+//        QMovie* movie = new QMovie(":/Image/point.gif");
         label->setMovie(movie);
         label->setAlignment(Qt::AlignCenter);
         label->resize(10,10);
@@ -66,15 +69,15 @@ MainWindow::MainWindow(QWidget *parent)
         label->show();
         insert_intail(Listhead,label);
     });
-    connect(TU->timeupdate2, &QTimer::timeout,[=](){//fluent to recv
-//        qDebug()<<"1111";
-        if(wait == 0){
-            wait = 1;
-//            cout<<"#############"<<endl;
-            location_xy = udp->getxy();
-            wait = 0;
-        }
-    });
+//    connect(TU->timeupdate2, &QTimer::timeout,[=](){//fluent to recv
+////        qDebug()<<"1111";
+//        if(wait == 0){
+//            wait = 1;
+////            cout<<"#############"<<endl;
+//            location_xy = udp->getxy();
+//            wait = 0;
+//        }
+//    });
 
     MyPushButton *startButton = new MyPushButton(":/Image/startButton.jpg");
     startButton->setParent(this);
