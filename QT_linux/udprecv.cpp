@@ -70,13 +70,14 @@ void UDPrecv::recvxy(){
     }
     //calculate xy by string
     //string x#y#
+//modify the method to calculate xy to make sure we will get right answer
     for(int i=0;i<BUF_SIZE&&buf[i]!='\0';++i){
         if(buf[i]=='#'){
             strncpy(buf1,buf,i);
-            buf[i] = '\0';
+            buf1[i] = '\0';
             for(int j = i+1;j<BUF_SIZE&&buf[j]!='\0';++j){
                 if(buf[j]=='#'){
-                    buf[j] = '\0';
+                    buf2[j-1] = '\0';
                     strncpy(buf2,buf+i+1,j-i-1);
                 }
             }
@@ -86,4 +87,5 @@ void UDPrecv::recvxy(){
     //strtod: string to double
     x = strtod(buf1,NULL);
     y = strtod(buf2,NULL);
+    if(x>800) cout<<buf<<endl;
 }
