@@ -47,24 +47,21 @@ UDPrecv::UDPrecv()
         while (true){
             recvfrom(sockfd, buf, 128, 0, (struct sockaddr*)&clientaddr, &len);
 //            printf("client ip: %s, client port: %d\n", inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port));
-            write(fd[1],buf,sizeof(buf));
+            write(fd[1],buf,BUF_SIZE);
         }
         close(sockfd);
     }
 }
 
 void UDPrecv::recvxy(){
-    //make sure the buflast and buf is empty(all of them are 0)
-    memset(buflast,0,sizeof(buflast));
-    memset(buf,0,sizeof(buf));
     //setting pipe to none blocking
     int ret = fcntl(fd[0],F_GETFL);
     ret |=O_NONBLOCK;
     fcntl(fd[0],F_SETFL,ret);
     //recording whether there is something need to return
     re = true;
-    while((ret = read(fd[0],buflast,sizeof(buflast)))>0){
-        memcpy(buf,buflast,sizeof (buf));
+    while((ret = read(fd[0],buflast,BUF_SIZE))>0){
+        memcpy(buf,buflast,BUF_SIZE);
         re = false;
     }
 
@@ -72,11 +69,17 @@ void UDPrecv::recvxy(){
         return;
     }
     //calculate xy by string
-    for(int i=0;i<128&&buf[i]!='\0';++i){
+    //string x#y#
+    for(int i=0;i<BUF_SIZE&&buf[i]!='\0';++i){
         if(buf[i]=='#'){
             strncpy(buf1,buf,i);
             buf[i] = '\0';
-            strncpy(buf2,buf+i+1,127-i);
+            for(int j = i+1;j<BUF_SIZE&&buf[j]!='\0';++j){
+                if(buf[j]=='#'){
+                    buf[j] = '\0';
+                    strncpy(buf2,buf+i+1,j-i-1);
+                }
+            }
             break;
         }
     }
