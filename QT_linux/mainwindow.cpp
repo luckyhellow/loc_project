@@ -61,17 +61,19 @@ MainWindow::MainWindow(QWidget *parent)
     movie->start();
     connect(TU->timeupdate, &QTimer::timeout,[=](){//fluent to show
         //get the location of xy now
-        location_xy = udp->getxy();
+        struct_xy = udp->getxy();
         //creat a label and use it show the xy's location
         //watch out Memory leak!
-        label = new QLabel(this);
-        label->setMovie(movie);
-        label->setAlignment(Qt::AlignCenter);
-        label->resize(10,10);
-        label->move(140+location_xy[0],location_xy[1]+40);
-        label->show();
-        //add to list inorder to realize the function of deleting labels
-        insert_intail(Listhead,label);
+        if(struct_xy.label!=""){
+            label = new QLabel(this);
+            label->setMovie(movie);
+            label->setAlignment(Qt::AlignCenter);
+            label->resize(10,10);
+            label->move(140+struct_xy.x,struct_xy.y+40);
+            label->show();
+            //add to list inorder to realize the function of deleting labels
+            insert_intail(Listhead,label);
+        }
     });
 
     //create button to control start or not

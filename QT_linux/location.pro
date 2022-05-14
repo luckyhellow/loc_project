@@ -12,15 +12,15 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     mypushbutton.cpp \
-    qlabel_list.cpp \
     time_update.cpp \
+    tools.cpp \
     udprecv.cpp
 
 HEADERS += \
     mainwindow.h \
     mypushbutton.h \
-    qlabel_list.h \
     time_update.h \
+    tools.h \
     udprecv.h
 
 FORMS += \

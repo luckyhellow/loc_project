@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <thread>
-#include<stdlib.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
@@ -13,20 +13,22 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <fstream>
-#include <vector>
-#include<unistd.h>
-#include<fcntl.h>
-#include<stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <stdlib.h>
+#include <tools.h>
 
 #define PORT 8888
-#define BUF_SIZE 128
+#define BUF_SIZE 256
 
 using namespace std;
 
 
 class UDPrecv
 {
+    int st;
     int fd[2];
+    char buflabel[BUF_SIZE] = {0};
     char buf1[BUF_SIZE] = {0};
     char buf2[BUF_SIZE] = {0};
     char buf[BUF_SIZE] = {0};
@@ -34,14 +36,14 @@ class UDPrecv
     double x = 0;
     double y = 0;
     bool re = true;
-
+    string label;
 
 public:
     UDPrecv();
     void recvxy();
-    vector<double> getxy(){
+    Struct_XY getxy(){
         recvxy();
-        return vector<double>{x,y};
+        return Struct_XY{label,x,y};
     }
 };
 

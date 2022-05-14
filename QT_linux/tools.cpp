@@ -1,11 +1,11 @@
-#include "qlabel_list.h"
+#include "tools.h"
 
 Qlabel_List::Qlabel_List()
 {
 
 }
 
-bool insert_intail(labelList& head,QLabel* label)//
+bool insert_intail(QlabelList& head,QLabel* label)//
 {
     if(head == NULL)
     {
@@ -30,7 +30,7 @@ bool insert_intail(labelList& head,QLabel* label)//
     return 0;
 }
 
-void clear(labelList& head)
+void clear(QlabelList& head)
 {
     if(head==NULL) return;
     Node* p = head;

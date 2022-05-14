@@ -7,11 +7,12 @@
 #include <QLabel>
 #include <QMovie>
 #include "time_update.h"
-#include "qlabel_list.h"
+#include "tools.h"
 #include <QIntValidator>
 #include <QLineEdit>
 #include <udprecv.h>
 #include <vector>
+#include <unordered_map>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -29,11 +30,12 @@ public:
 private:
     Ui::MainWindow *ui;
     Time_update *TU;
-    vector<double> location_xy = {0,0};
+    Struct_XY struct_xy = {"",0,0};
     QLabel *label;
-    labelList Listhead = NULL;
+    QlabelList Listhead = NULL;
     int hz = 0;
     UDPrecv* udp;
     int wait = 0;
+    unordered_map<string,QlabelList> hashmap;
 };
 #endif // MAINWINDOW_H

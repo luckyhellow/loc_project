@@ -71,21 +71,36 @@ void UDPrecv::recvxy(){
     //calculate xy by string
     //string x#y#
 //modify the method to calculate xy to make sure we will get right answer
+    int st = 0;
     for(int i=0;i<BUF_SIZE&&buf[i]!='\0';++i){
         if(buf[i]=='#'){
-            strncpy(buf1,buf,i);
-            buf1[i] = '\0';
-            for(int j = i+1;j<BUF_SIZE&&buf[j]!='\0';++j){
-                if(buf[j]=='#'){
-                    buf2[j-1] = '\0';
-                    strncpy(buf2,buf+i+1,j-i-1);
-                }
-            }
+            //label
+            strncpy(buflabel,buf,i);
+            buflabel[i] = '\0';
+            st = i+1;
+            break;
+        }
+    }
+    for(int i = st;i<BUF_SIZE&&buf[i]!='\0';++i){
+        if(buf[i]=='#'){
+            //value of x
+            strncpy(buf1,buf+st,i-st);
+            buf1[i-st] = '\0';
+            st = i+1;
+            break;
+        }
+    }
+    for(int i = st;i<BUF_SIZE&&buf[i]!='\0';++i){
+        if(buf[i]=='#'){
+            //value of y
+            strncpy(buf2,buf+st,i-st);
+            buf2[i-st] = '\0';
             break;
         }
     }
     //strtod: string to double
+    label = buflabel;
     x = strtod(buf1,NULL);
     y = strtod(buf2,NULL);
-    if(x>800) cout<<buf<<endl;
+    cout<<label<<" "<<x<<" "<<y<<endl;
 }
