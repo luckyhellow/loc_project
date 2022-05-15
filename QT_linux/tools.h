@@ -10,20 +10,16 @@ struct Struct_XY{
     double y;
 };
 
-typedef struct Node {
-    QLabel * label;
+struct Node {
+    QLabel * qlabel;
     Node* next = NULL;
-} Node;
+};
 
 typedef struct Node* QlabelList;
 
-bool insert_intail(QlabelList& head,QLabel* label);
-void clear(QlabelList& head);
-
-class Qlabel_List
-{
-public:
-    Qlabel_List();
-};
+void insert(QlabelList& head,QLabel* qlabel);
+void clean(QlabelList& head);
+void hideqlabels(QlabelList& head);
+void showqlabels(QlabelList& head);
 
 #endif // TOOLS_H

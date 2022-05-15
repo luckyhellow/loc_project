@@ -1,18 +1,25 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "mypushbutton.h"
 #include <QDebug>
+
+#define WINDOW_LENGTH 1500
+#define WINDOW_WIDTH 1000
+
+#define MAX_LENTH 1000
+#define MAX_WIDTH 800
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+    scale = min(WINDOW_LENGTH*0.8/MAX_LENTH,WINDOW_WIDTH*0.7/MAX_WIDTH);
     ui->setupUi(this);
     setWindowIcon(QIcon(":/Image/Icon.jpg"));
     //重置窗口大小
-    resize(1080,800);
+    resize(WINDOW_LENGTH,WINDOW_WIDTH);
     //固定大小
-    setFixedSize(1080,800);
+    setFixedSize(WINDOW_LENGTH,WINDOW_WIDTH);
     //设置窗口标题
     setWindowTitle("(lucky_demo)locate app");
 
@@ -39,9 +46,14 @@ MainWindow::MainWindow(QWidget *parent)
      //   菜单   //   end
     // //////////
 
-    this->TU = new Time_update(this);//计时器更新的频率
-    //fluence of updating xy's value
-//    TU->begin_recv(1000);
+    //create button group to choose labels
+    QGroupBox *labelGroup = new QGroupBox(this);
+    labelGroup->setTitle("choose labels");
+    labelGroup->setGeometry(WINDOW_LENGTH*0.01, WINDOW_WIDTH*0.05, WINDOW_LENGTH*0.18, WINDOW_WIDTH*0.5);
+
+    QVBoxLayout *labelLayout = new QVBoxLayout(labelGroup);
+
+    this->TU = new Time_update(this);//Create Qtime
 
     //输入框
     QLineEdit* lineedit = new QLineEdit();
@@ -50,8 +62,8 @@ MainWindow::MainWindow(QWidget *parent)
     intValidator->setRange(1, 1000);
     lineedit->setValidator(intValidator);
     lineedit->setParent(this);
-    lineedit->resize(100,27);
-    lineedit->move(100,670);
+    lineedit->resize(WINDOW_LENGTH*0.1,WINDOW_WIDTH*0.035);
+    lineedit->move(WINDOW_LENGTH*0.1,WINDOW_WIDTH*0.85);
     lineedit->show();
 
     //creat a new instance of "udprecv" to recv the data
@@ -62,36 +74,62 @@ MainWindow::MainWindow(QWidget *parent)
     connect(TU->timeupdate, &QTimer::timeout,[=](){//fluent to show
         //get the location of xy now
         struct_xy = udp->getxy();
-        //creat a label and use it show the xy's location
+        //creat a qlabel and use it show the xy's location
         //watch out Memory leak!
-        if(struct_xy.label!=""){
-            label = new QLabel(this);
-            label->setMovie(movie);
-            label->setAlignment(Qt::AlignCenter);
-            label->resize(10,10);
-            label->move(140+struct_xy.x,struct_xy.y+40);
-            label->show();
-            //add to list inorder to realize the function of deleting labels
-            insert_intail(Listhead,label);
+        if(hashmap.count(struct_xy.label)==0){//this label is received at the first time
+            //creat hashmap
+            string strconnect = struct_xy.label;
+            hashmap[strconnect] = NULL;
+            //create button
+            checkbox = new QCheckBox(QString::fromStdString(strconnect), labelGroup);
+            //set the button's state to having been chose
+            checkbox->setChecked(true);
+            hashchoose[strconnect] = true;
+            //layout it
+            labelLayout->addWidget(checkbox);
+            labelGroup->setLayout(labelLayout);
+            //add to vector
+            qcheckboxs.push_back(checkbox);
+            //when the state of buttons change, show or hide
+            connect(checkbox, &QCheckBox::toggled, [=](bool isChecked){
+                    if (isChecked){
+//                        qDebug() << " true ";
+//                        cout<<strconnect<<endl;
+                        hashchoose[strconnect] = true;
+                        showqlabels(hashmap[strconnect]);
+                    }
+                    else{
+//                        qDebug() << " false ";
+//                        cout<<strconnect<<endl;
+                        hashchoose[strconnect] = false;
+                        hideqlabels(hashmap[strconnect]);
+                    }
+                });
         }
+        qlabel = new QLabel(this);
+        qlabel->setMovie(movie);
+        qlabel->setAlignment(Qt::AlignCenter);
+        qlabel->resize(WINDOW_LENGTH*0.01,WINDOW_LENGTH*0.01);
+        qlabel->move(WINDOW_LENGTH*0.2+struct_xy.x*scale,struct_xy.y*scale+WINDOW_WIDTH*0.05);
+        if(hashchoose[struct_xy.label]) qlabel->show();
+        //add to list inorder to realize the function of deleting labels
+        insert(hashmap[struct_xy.label],qlabel);
     });
 
     //create button to control start or not
     //and connect it with HZ of showing label
     MyPushButton *startButton = new MyPushButton(":/Image/startButton.jpg");
     startButton->setParent(this);
-    startButton->move(300,625);
+    startButton->move(WINDOW_LENGTH*0.25,WINDOW_WIDTH*0.8);
     connect(startButton,&MyPushButton::clicked,[=](){
         //a simple animation effect
         startButton->tik();
         startButton->tok();
         if(lineedit->text()==""){
             TU->begin_update();
-//            qDebug() <<"str == null\n";
         }
         else {
             hz = lineedit->text().toInt();
-//            qDebug() <<hz;
             TU->begin_update(hz);
         }
     });
@@ -99,14 +137,17 @@ MainWindow::MainWindow(QWidget *parent)
     //create button to clear the labels we have created
     MyPushButton *clearButton = new MyPushButton(":/Image/clearButton.jpg");
     clearButton->setParent(this);
-    clearButton->move(625,625);
+    clearButton->move(WINDOW_LENGTH*0.6,WINDOW_WIDTH*0.8);
     connect(clearButton,&MyPushButton::clicked,[=](){
         //a simple animation effect
         clearButton->tik();
         clearButton->tok();
-        //clear the show and delete labels we create with "new"
+        //clear the show and delete qlabels we create with "new"
         //watch out memory leak
-        clear(Listhead);
+        for(const auto &keyvalue:hashmap){
+//            cout<<"label: "<<keyvalue.first<<endl;
+            clean(hashmap[keyvalue.first]);
+        }
     });
 
 }
@@ -120,12 +161,10 @@ void MainWindow::paintEvent(QPaintEvent *)
     painter.drawPixmap(0,0,this->width(),this->height(),pix);
 
     pix.load(":/Image/white.jpg");
-    pix = pix.scaled(800,600);
-    painter.drawPixmap(140,0,800,600,pix);
+    painter.drawPixmap(WINDOW_LENGTH*0.2,0,WINDOW_LENGTH*0.8,WINDOW_WIDTH*0.75,pix);
 
     pix.load(":/Image/background.jpg");
-    pix = pix.scaled(1080,200);
-    painter.drawPixmap(0,600,1080,200,pix);
+    painter.drawPixmap(0,WINDOW_WIDTH*0.75,WINDOW_LENGTH,WINDOW_WIDTH*0.25,pix);
 
 }
 
@@ -133,5 +172,8 @@ void MainWindow::paintEvent(QPaintEvent *)
 MainWindow::~MainWindow()
 {
     delete ui;
+    for(auto qcheckbox:qcheckboxs){
+        delete qcheckbox;
+    }
 }
 

@@ -13,6 +13,10 @@
 #include <udprecv.h>
 #include <vector>
 #include <unordered_map>
+#include <QGroupBox>
+#include <QCheckBox>
+#include <QVBoxLayout>
+#include "mypushbutton.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -28,14 +32,17 @@ public:
     void paintEvent(QPaintEvent *);
 
 private:
+    QCheckBox *checkbox;
+    double scale;
     Ui::MainWindow *ui;
     Time_update *TU;
     Struct_XY struct_xy = {"",0,0};
-    QLabel *label;
-    QlabelList Listhead = NULL;
+    QLabel *qlabel;
     int hz = 0;
     UDPrecv* udp;
     int wait = 0;
     unordered_map<string,QlabelList> hashmap;
+    unordered_map<string,bool> hashchoose;
+    vector<QCheckBox *> qcheckboxs;
 };
 #endif // MAINWINDOW_H

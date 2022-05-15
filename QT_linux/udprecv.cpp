@@ -70,7 +70,7 @@ void UDPrecv::recvxy(){
     }
     //calculate xy by string
     //string x#y#
-//modify the method to calculate xy to make sure we will get right answer
+    //modify the method to calculate xy to make sure we will get right answer
     int st = 0;
     for(int i=0;i<BUF_SIZE&&buf[i]!='\0';++i){
         if(buf[i]=='#'){
@@ -102,5 +102,5 @@ void UDPrecv::recvxy(){
     label = buflabel;
     x = strtod(buf1,NULL);
     y = strtod(buf2,NULL);
-    cout<<label<<" "<<x<<" "<<y<<endl;
+//    cout<<label<<" "<<x<<" "<<y<<endl;
 }

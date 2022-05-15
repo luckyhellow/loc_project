@@ -16,13 +16,15 @@ count = 0
 
 while recv!="end":
     count += 1
-    x = random.randint(1,800)
-    y = random.randint(1,500)
+    x = random.randint(1,1000)
+    y = random.randint(1,800)
     if count==3:
         dis = "label1#" + str(x)+"#"+str(y)+"#"
+    elif count == 6:
+        dis = "label2#" + str(x)+"#"+str(y)+"#"
         count = 0
     else:
-        dis = "label2#" + str(x)+"#"+str(y)+"#"
+        dis = "label3#" + str(x)+"#"+str(y)+"#"
     if dis!='':
         server_address = ("127.0.0.1", PORT)  # 接收方 服务器的ip地址和端口号
         client_socket.sendto(dis.encode(), server_address) #将msg内容发送给指定接收方

@@ -1,19 +1,12 @@
 #include "tools.h"
 
-Qlabel_List::Qlabel_List()
-{
-
-}
-
-bool insert_intail(QlabelList& head,QLabel* label)//
+void insert(QlabelList& head,QLabel* qlabel)//
 {
     if(head == NULL)
     {
         head = new Node;
-        head->label = label;
+        head->qlabel = qlabel;
         head->next = NULL;
-        return 1;
-        return 0;
     }
     else
     {   Node *q;
@@ -24,13 +17,12 @@ bool insert_intail(QlabelList& head,QLabel* label)//
         }
         q->next = new Node;
         q->next->next = NULL;
-        q->next->label = label;
-        return 1;
+        q->next->qlabel = qlabel;
     }
-    return 0;
+    return;
 }
 
-void clear(QlabelList& head)
+void clean(QlabelList& head)
 {
     if(head==NULL) return;
     Node* p = head;
@@ -39,10 +31,30 @@ void clear(QlabelList& head)
     {
         q = p;
         p = p->next;
-        q->label->clear();
+        q->qlabel->clear();
         //deal with Memory leak
-        delete q->label;
+        delete q->qlabel;
         delete q;
     }
     head = NULL;
+}
+
+void hideqlabels(QlabelList& head){
+    if(head==NULL) return;
+    Node* p = head;
+    while(p!=NULL)
+    {
+        p->qlabel->hide();
+        p = p->next;
+    }
+}
+
+void showqlabels(QlabelList& head){
+    if(head==NULL) return;
+    Node* p = head;
+    while(p!=NULL)
+    {
+        p->qlabel->show();
+        p = p->next;
+    }
 }
