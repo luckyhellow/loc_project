@@ -7,5 +7,6 @@
         <file>Image/startButton.jpg</file>
         <file>Image/white.jpg</file>
         <file>Image/point.gif</file>
+        <file>Image/point.png</file>
     </qresource>
 </RCC>

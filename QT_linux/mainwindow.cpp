@@ -8,7 +8,6 @@
 #define MAX_LENTH 1000
 #define MAX_WIDTH 800
 
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -66,20 +65,42 @@ MainWindow::MainWindow(QWidget *parent)
     lineedit->move(WINDOW_LENGTH*0.1,WINDOW_WIDTH*0.85);
     lineedit->show();
 
+    //框
+    QLabel* backlabel = new QLabel(this);
+    backlabel->resize(MAX_LENTH*scale,MAX_WIDTH*scale);
+    backlabel->setStyleSheet("border: 5px solid black;");
+    backlabel->move(WINDOW_LENGTH*0.2,WINDOW_WIDTH*0.05);
+    backlabel->show();
+
     //creat a new instance of "udprecv" to recv the data
     udp = new UDPrecv();
 
-    QMovie* movie = new QMovie(":/Image/point.gif");
-    movie->start();
     connect(TU->timeupdate, &QTimer::timeout,[=](){//fluent to show
         //get the location of xy now
         struct_xy = udp->getxy();
         //creat a qlabel and use it show the xy's location
         //watch out Memory leak!
-        if(hashmap.count(struct_xy.label)==0){//this label is received at the first time
+        if(struct_xy.label!="" && hashmap.count(struct_xy.label)==0){
+            //this label is received at the first time
             //creat hashmap
             string strconnect = struct_xy.label;
             hashmap[strconnect] = NULL;
+
+            //generate a new picture with random color
+            QImage image;
+            int r = rand()%128+rand()%128;
+            int g = rand()%128+rand()%128;
+            int b = rand()%128+rand()%128;
+            image.load(":/Image/point.png");
+            int w=image.width();
+            int h=image.height();
+            for(int i=0;i<h;i++){
+                for(int j=0;j<w;j++){
+                    image.setPixel(j,i,qRgb(r,g,b));
+                }
+            }
+            hashpix[strconnect] = QPixmap(QPixmap::fromImage(image));
+
             //create button
             checkbox = new QCheckBox(QString::fromStdString(strconnect), labelGroup);
             //set the button's state to having been chose
@@ -107,7 +128,7 @@ MainWindow::MainWindow(QWidget *parent)
                 });
         }
         qlabel = new QLabel(this);
-        qlabel->setMovie(movie);
+        qlabel->setPixmap(hashpix[struct_xy.label]);
         qlabel->setAlignment(Qt::AlignCenter);
         qlabel->resize(WINDOW_LENGTH*0.01,WINDOW_LENGTH*0.01);
         qlabel->move(WINDOW_LENGTH*0.2+struct_xy.x*scale,struct_xy.y*scale+WINDOW_WIDTH*0.05);
@@ -165,7 +186,6 @@ void MainWindow::paintEvent(QPaintEvent *)
 
     pix.load(":/Image/background.jpg");
     painter.drawPixmap(0,WINDOW_WIDTH*0.75,WINDOW_LENGTH,WINDOW_WIDTH*0.25,pix);
-
 }
 
 

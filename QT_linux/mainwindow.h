@@ -5,7 +5,7 @@
 #include <QPainter>
 #include <QTimer>
 #include <QLabel>
-#include <QMovie>
+//#include <QMovie>
 #include "time_update.h"
 #include "tools.h"
 #include <QIntValidator>
@@ -17,6 +17,8 @@
 #include <QCheckBox>
 #include <QVBoxLayout>
 #include "mypushbutton.h"
+#include <QImage>
+#include <random>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -43,6 +45,7 @@ private:
     int wait = 0;
     unordered_map<string,QlabelList> hashmap;
     unordered_map<string,bool> hashchoose;
+    unordered_map<string,QPixmap> hashpix;
     vector<QCheckBox *> qcheckboxs;
 };
 #endif // MAINWINDOW_H
