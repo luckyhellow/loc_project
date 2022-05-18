@@ -141,6 +141,8 @@ MainWindow::MainWindow(QWidget *parent)
     //and connect it with HZ of showing label
     MyPushButton *startButton = new MyPushButton(":/Image/startButton.png");
     startButton->setParent(this);
+    startButton->setFixedSize(WINDOW_WIDTH*0.2,WINDOW_WIDTH*0.2);
+    startButton->setIconSize(QSize(WINDOW_WIDTH*0.2,WINDOW_WIDTH*0.2));
     startButton->move(WINDOW_LENGTH*0.25,WINDOW_WIDTH*0.8);
     connect(startButton,&MyPushButton::clicked,[=](){
         //a simple animation effect
@@ -158,6 +160,8 @@ MainWindow::MainWindow(QWidget *parent)
     //create button to clear the labels we have created
     MyPushButton *clearButton = new MyPushButton(":/Image/clearButton.png");
     clearButton->setParent(this);
+    startButton->setFixedSize(WINDOW_WIDTH*0.2,WINDOW_WIDTH*0.2);
+    startButton->setIconSize(QSize(WINDOW_WIDTH*0.2,WINDOW_WIDTH*0.2));
     clearButton->move(WINDOW_LENGTH*0.6,WINDOW_WIDTH*0.8);
     connect(clearButton,&MyPushButton::clicked,[=](){
         //a simple animation effect
