@@ -37,13 +37,14 @@ class UDPrecv
     double y = 0;
     bool re = true;
     string label;
+    TIME time;
 
 public:
     UDPrecv();
     void recvxy();
     Struct_XY getxy(){
         recvxy();
-        return Struct_XY{label,x,y};
+        return Struct_XY{label,time,x,y};
     }
 };
 

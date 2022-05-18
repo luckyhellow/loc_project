@@ -1,8 +1,14 @@
 #include "udprecv.h"
 #include <signal.h>
-UDPrecv::UDPrecv()
-{
-    pipe(fd);
+UDPrecv::UDPrecv(){
+    //simple init
+    time_t rawtime = 0;
+    time.time_s = *localtime( &rawtime );
+    time.time_ms = 0;
+
+    if(pipe(fd)==-1){
+        return;
+    }
     pid_t pid = fork();
     if(pid>0){
         //parent process
@@ -81,6 +87,27 @@ void UDPrecv::recvxy(){
             break;
         }
     }
+    //get time
+        time.time_s.tm_year = (buf[st]-'0')*1000+(buf[st+1]-'0')*100+(buf[st+2]-'0')*10+buf[st+3]-'0';
+        st+=4;
+        time.time_s.tm_mon = (buf[st]-'0')*10+buf[st+1]-'0';
+        st+=2;
+        time.time_s.tm_mday = (buf[st]-'0')*10+buf[st+1]-'0';
+        st+=2;
+        time.time_s.tm_hour = (buf[st]-'0')*10+buf[st+1]-'0';
+        st+=2;
+        time.time_s.tm_min = (buf[st]-'0')*10+buf[st+1]-'0';
+        st+=2;
+        time.time_s.tm_sec = (buf[st]-'0')*10+buf[st+1]-'0';
+        st+=2;
+        time.time_ms = (buf[st]-'0')*100+(buf[st+1]-'0')*10+(buf[st+2]-'0');
+        st+=3;
+        if(buf[st]!='#') {
+//            cout<<"something wrong with time";
+            return;
+        }
+        ++st;
+
     for(int i = st;i<BUF_SIZE&&buf[i]!='\0';++i){
         if(buf[i]=='#'){
             //value of x

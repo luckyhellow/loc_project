@@ -38,7 +38,7 @@ private:
     double scale;
     Ui::MainWindow *ui;
     Time_update *TU;
-    Struct_XY struct_xy = {"",0,0};
+    Struct_XY struct_xy = {};
     QLabel *qlabel;
     int hz = 0;
     UDPrecv* udp;
