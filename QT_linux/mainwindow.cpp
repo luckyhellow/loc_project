@@ -139,7 +139,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     //create button to control start or not
     //and connect it with HZ of showing label
-    MyPushButton *startButton = new MyPushButton(":/Image/startButton.jpg");
+    MyPushButton *startButton = new MyPushButton(":/Image/startButton.png");
     startButton->setParent(this);
     startButton->move(WINDOW_LENGTH*0.25,WINDOW_WIDTH*0.8);
     connect(startButton,&MyPushButton::clicked,[=](){
@@ -156,7 +156,7 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
     //create button to clear the labels we have created
-    MyPushButton *clearButton = new MyPushButton(":/Image/clearButton.jpg");
+    MyPushButton *clearButton = new MyPushButton(":/Image/clearButton.png");
     clearButton->setParent(this);
     clearButton->move(WINDOW_LENGTH*0.6,WINDOW_WIDTH*0.8);
     connect(clearButton,&MyPushButton::clicked,[=](){
