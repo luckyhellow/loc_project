@@ -2,8 +2,8 @@
 #include "ui_mainwindow.h"
 #include <QDebug>
 
-#define WINDOW_LENGTH 1500
-#define WINDOW_WIDTH 1000
+#define WINDOW_LENGTH 2400
+#define WINDOW_WIDTH 1600
 
 #define MAX_LENTH 1000
 #define MAX_WIDTH 800

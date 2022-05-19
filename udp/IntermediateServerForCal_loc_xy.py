@@ -17,13 +17,13 @@ sleeptime = 0.1
 
 
 def Recv_tdoa_data(fd0, fd1):
-    ip_port_server = ('127.0.0.1', PORT_recv)
-    server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    server_socket.bind(ip_port_server)
+    ip_port_recv = ('127.0.0.1', PORT_recv)
+    recv_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    recv_socket.bind(ip_port_recv)
 
     os.close(fd0)
     while True:
-        data,server_addr = server_socket.recvfrom(BUFSIZE)
+        data,server_addr = recv_socket.recvfrom(BUFSIZE)
         if data!='':
             # data_str = data.decode()
             #print(data_str)
@@ -37,7 +37,7 @@ def Recv_tdoa_data(fd0, fd1):
 
 
 def Send_loc_xy(fd0, fd1):
-    client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    send_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
     bs_8 = []
     bs_373 = []
@@ -72,7 +72,7 @@ def Send_loc_xy(fd0, fd1):
                 SendTo_QT_address = (IP_send, PORT_send)
                 for i in xy_tuple:
                     print(i.encode())
-                    client_socket.sendto(i.encode(), SendTo_QT_address)
+                    send_socket.sendto(i.encode(), SendTo_QT_address)
                 
         
 

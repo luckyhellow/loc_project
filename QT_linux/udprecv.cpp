@@ -51,7 +51,7 @@ UDPrecv::UDPrecv(){
 
 
         while (true){
-            recvfrom(sockfd, buf, 128, 0, (struct sockaddr*)&clientaddr, &len);
+            recvfrom(sockfd, buf, BUF_SIZE, 0, (struct sockaddr*)&clientaddr, &len);
 //            printf("client ip: %s, client port: %d\n", inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port));
             write(fd[1],buf,BUF_SIZE);
         }
