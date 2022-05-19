@@ -54,8 +54,13 @@ def cal_loc(bs_8,bs_373,tdoa_8,tdoa_373):
     teste = 1e-2
     RetX = []
     RetY = []
-    flag = 0   #flag表示有节
+    flag = 0   #flag表示有解
     for i in range(2):
+        if(TRX[i] == [] or TRD[i] == []):
+            flag += (i+1)
+            RetX.append(0)
+            RetY.append(0)
+            continue
         testx = np.array(TRX[i])
         testd = np.array(TRD[i][1:])
         LAA = LocationAlgorithmAgent( x=testx,d=testd,e=teste)
@@ -71,7 +76,7 @@ def cal_loc(bs_8,bs_373,tdoa_8,tdoa_373):
             RetY.append(Loc[1])
 
     #return flag,RetX[0],RetY[0],RetX[1],RetY[1]
-    return flag,RetX[0]/10,RetY[0]/5,RetX[1]/10,RetY[1]/5
+    return flag,RetX[0]/10,RetY[0]/5,RetX[1]/10,RetY[1]/5 # 因为显示的原因作出调整
 
 def Get_TDOA_data():
     base_path = "./DATA/"
@@ -154,12 +159,14 @@ def CAL_Loc(data_list,bs_8,bs_373,tdoa_8,tdoa_373):
     ret = []
 
     while index<Len:
-        if(index+1<Len and data_list[index][0]==data_list[index][0]):
+        if(index+1<Len and data_list[index][0]==data_list[index+1][0]):
             tail = index+2
         else:
             tail = index+1
+        prefix1 = 'label'+data_list[index][1]+'#'+''.join(filter(str.isdigit,data_list[index][0]))+'#'
+        prefix2 = 'label'+data_list[tail-1][1]+'#'+''.join(filter(str.isdigit,data_list[tail-1][0]))+'#'
         for i in range(index,tail):
-            bs_num = int(data_list[index][2])
+            bs_num = int(data_list[i][2])
             fflag = 0
             for j in range(bs_num):
                 if(data_list[i][3+j] not in BS_ID_List):
@@ -178,17 +185,21 @@ def CAL_Loc(data_list,bs_8,bs_373,tdoa_8,tdoa_373):
             if(data_list[i][1]=="373"):
                 bs_373 = tmp1
                 tdoa_373 = tmp2
-        index = tail
+        
         flag,x1,y1,x2,y2 = cal_loc(bs_8,bs_373,tdoa_8,tdoa_373)
-        if(flag<2):
-            Str_Loc2=str(x2)+'#'+str(y2)+'#'
-        if(flag%2==0):
-            Str_Loc1=str(x1)+'#'+str(y1)+'#'
-        if(flag>0):
-            #print(flag)
-            pass
-        #ret.append((Str_Loc1,Str_Loc2))
-        ret.append(Str_Loc1)
+        # if(flag<2):
+        #     Str_Loc2=str(x2)+'#'+str(y2)+'#'
+        # if(flag%2==0):
+        #     Str_Loc1=str(x1)+'#'+str(y1)+'#'
+        # if(flag>0):
+        #     #print(flag)
+        #     pass
+        Str_Loc2=prefix2+str(x2)+'#'+str(y2)+'#'
+        Str_Loc1=prefix1+str(x1)+'#'+str(y1)+'#'
+        ret.append((Str_Loc1,Str_Loc2))
+        #ret.append(Str_Loc1)
+
+        index = tail
     
     return ret,bs_8,bs_373,tdoa_8,tdoa_373
         
