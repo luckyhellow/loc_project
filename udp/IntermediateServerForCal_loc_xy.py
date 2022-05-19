@@ -20,7 +20,6 @@ def Recv_tdoa_data(fd0, fd1):
     ip_port_recv = ('127.0.0.1', PORT_recv)
     recv_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     recv_socket.bind(ip_port_recv)
-
     os.close(fd0)
     while True:
         data,server_addr = recv_socket.recvfrom(BUFSIZE)
@@ -38,12 +37,10 @@ def Recv_tdoa_data(fd0, fd1):
 
 def Send_loc_xy(fd0, fd1):
     send_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-
     bs_8 = []
     bs_373 = []
     tdoa_8 = []
     tdoa_373 = []
-
     os.close(fd1)
     while True:
         DATALIST = []
