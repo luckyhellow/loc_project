@@ -7,17 +7,17 @@ import Algorithm.LA_class
 
 
 BUFSIZE = 1024
-PORT_recv = 7777
-PORT_send = 8888
-# IP_send = '172.27.159.203'
-IP_send = '192.168.107.163'
-# IP_send = '127.0.0.1'
+PORT_LOCAL = 7777
+PORT_TARGET = 8888
+# IP_TARGET = '172.27.159.203'
+IP_TARGET = '192.168.107.163'
+# IP_TARGET = '127.0.0.1'
 
 sleeptime = 0.1
 
 
 def Recv_tdoa_data(fd0, fd1):
-    ip_port_recv = ('127.0.0.1', PORT_recv)
+    ip_port_recv = ('127.0.0.1', PORT_LOCAL)
     recv_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     recv_socket.bind(ip_port_recv)
     os.close(fd0)
@@ -64,9 +64,9 @@ def Send_loc_xy(fd0, fd1):
 
             print("calculate by function and send by udpconnect...")
             for xy_tuple in Loc_xy:
-                #print("send to PORT:",PORT_send)
-                #print("send to IP:",IP_send)
-                SendTo_QT_address = (IP_send, PORT_send)
+                #print("send to PORT:",PORT_TARGET)
+                #print("send to IP:",IP_TARGET)
+                SendTo_QT_address = (IP_TARGET, PORT_TARGET)
                 for i in xy_tuple:
                     print(i.encode())
                     send_socket.sendto(i.encode(), SendTo_QT_address)
