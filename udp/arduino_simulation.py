@@ -7,15 +7,15 @@ from time import sleep
 
 BUFSIZE = 1024
 
-#client 发送端
-# ip_port_client = ('127.0.0.1', 9997)
-client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-# client_socket.bind(ip_port_client)
+#创建套节字
+# local_address = ('127.0.0.1', 9997)
+send_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) #创建udp套节字以发送数据
+# client_socket.bind(local_address)
 
 PORT = 7777
 
-# server_address = ("192.168.3.180", PORT)  # 接收方 服务器的ip地址和端口号
-server_address = ("127.0.0.1", PORT)  # 接收方 服务器的ip地址和端口号
+# target_address = ("192.168.3.180", PORT)  # 接收方的ip地址和端口号
+target_address = ("127.0.0.1", PORT)  # 接收方的ip地址和端口号
 
 sleeptime = 0.2
 
@@ -31,8 +31,8 @@ if __name__ == '__main__':
     while(True):
         for i in range(df.shape[0]):
             str_to_send = "#".join([str(j) for j in (df.iloc[i]) ])
-            str_to_send = str_to_send[0:str_to_send.find("nan")]
+            str_to_send = str_to_send[0:str_to_send.find("nan")] #截取字符串后边为“NaN”的部分
             # print(str_to_send)
-            client_socket.sendto(str_to_send.encode(), server_address) #将msg内容发送给指定接收方
+            send_socket.sendto(str_to_send.encode(), target_address) #将msg内容发送给指定接收方
             print("send success content:",str_to_send)
             sleep(sleeptime)
