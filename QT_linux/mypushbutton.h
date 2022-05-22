@@ -1,6 +1,7 @@
 #ifndef MYPUSHBUTTON_H
 #define MYPUSHBUTTON_H
 
+#include <QBitmap>
 #include <QPushButton>
 #include <QPropertyAnimation>
 

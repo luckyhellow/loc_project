@@ -1,5 +1,6 @@
 #include "mypushbutton.h"
-
+#include <iostream>
+using namespace std;
 
 MyPushButton::MyPushButton(QString normalImg,QString pressImg)
 {
@@ -8,10 +9,9 @@ MyPushButton::MyPushButton(QString normalImg,QString pressImg)
     QPixmap pix;
     bool r = pix.load(normalImg);
     if(!r) return;
-    this->setFixedSize(pix.width(),pix.height());
-    this->setStyleSheet("QPushButton{border:opx;}");
-    this->setIcon(pix);
-    this->setIconSize(QSize(pix.width(),pix.height()));
+    this->setFixedSize(pix.size());
+    this->setMask(pix.mask());
+    this->setStyleSheet("background-image: url(" + normalImg + ")");
 }
 
 void MyPushButton::tik()

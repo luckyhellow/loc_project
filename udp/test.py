@@ -9,8 +9,8 @@ PORT = 8888
 
 sleeptime = 0.1
 
-IP_send = '192.168.107.163'
-# IP_send = '127.0.0.1'
+# IP_send = '192.168.107.163'
+IP_send = '127.0.0.1'
 date = ''
 dis = '100#300'
 recv = "start"#套接字编程控制 可以调节频率
