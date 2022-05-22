@@ -1,7 +1,7 @@
 # loc_project
 Doing now\
 \
-Introduction(Feishu):[https://kwwi5a2ur5.feishu.cn/docs/doccndqccTci2ixbNmX3CWAfNKh#](定位项目) \
+Introduction(Feishu):[定位项目](https://kwwi5a2ur5.feishu.cn/docs/doccndqccTci2ixbNmX3CWAfNKh#) \
 \
 Mail:luckyhelloworld@qq.com\
 \
