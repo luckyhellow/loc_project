@@ -17,7 +17,7 @@ UDPrecv::UDPrecv(){
     {
          pthread_detach(thread_id);
     }
-    cout<<"creat thread!"<<endl;
+//    cout<<"creat thread!"<<endl;
 }
 
 void* UDPrecv::recvxy(void* args){
@@ -59,6 +59,7 @@ void* UDPrecv::recvxy(void* args){
         //lock
         pthread_mutex_lock(&This->mtx);
         strncpy(This->buf,BUF,BUF_SIZE);
+        if(!This->begin) This->begin = true;
         //unlock
         pthread_mutex_unlock(&This->mtx);
     }
@@ -66,8 +67,8 @@ void* UDPrecv::recvxy(void* args){
 }
 
 Struct_XY UDPrecv::getxy(){
+    if(!begin) return Struct_XY{label,time,x,y};
     //calculate xy by string
-    //string x#y#
     //modify the method to calculate xy to make sure we will get right answer
     pthread_mutex_lock(&mtx);
     int st = 0;

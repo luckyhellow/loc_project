@@ -7,7 +7,7 @@ BUFSIZE = 1024
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 PORT = 8888
 
-sleeptime = 0.001
+sleeptime = 0.1
 
 # IP_send = '192.168.107.163'
 IP_send = '127.0.0.1'

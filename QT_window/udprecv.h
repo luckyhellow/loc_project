@@ -25,15 +25,14 @@ using namespace std;
 class UDPrecv
 {
     int st;
-    int fd[2];
     char buflabel[BUF_SIZE] = {0};
     char buf1[BUF_SIZE] = {0};
     char buf2[BUF_SIZE] = {0};
     char buf[BUF_SIZE] = {0};
     double x = 0;
     double y = 0;
-    bool re = true;
-    string label;
+    bool begin = false;
+    string label = "";
     TIME time;
     pthread_mutex_t mtx;
 
