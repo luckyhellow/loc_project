@@ -1,5 +1,5 @@
 # loc_project
-Doing now\
+close\
 \
 Introduction(Feishu):[定位项目](https://kwwi5a2ur5.feishu.cn/docs/doccndqccTci2ixbNmX3CWAfNKh#) \
 \
